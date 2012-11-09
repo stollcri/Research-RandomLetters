@@ -1,24 +1,23 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
+import sys, fileinput
 
-def process_file(file_name):
+def process_file():
 	flattened_tree = [16, 8, 23, 4, 12, 20, 25, 2, 6, 10, 14, 18, 22, 24, 26, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21]
 	letter_total = 0
 
 	# read in the file and create a list of tuples with letters and counts
 	letter_counts = []
-	with open(file_name) as letters_file:
-		for line in letters_file:
-			split_line = line.partition(" ")
-			letter = split_line[0]
-			count = int(split_line[2])
+	for line in fileinput.input():
+		split_line = line.partition(" ")
+		letter = split_line[0]
+		count = int(split_line[2])
 
-			letter_total += int(count)
+		letter_total += int(count)
 
-			letter_tuple = letter, count
-			letter_counts.append(letter_tuple)
+		letter_tuple = letter, count
+		letter_counts.append(letter_tuple)
 
 	# sort the list of letter tuples from most frequent to least frequent
 	letter_counts = sorted(letter_counts, key=lambda x: -x[1])
@@ -50,8 +49,9 @@ def process_file(file_name):
 	for letter_range in letter_ranges:
 		print letter_range
 
+		
 if __name__ == "__main__":
-	if len(sys.argv) == 2:
-		process_file(sys.argv[1])
-	else:
+	if len(sys.argv) >= 2 and sys.argv[1] == "-?":
 		print "Syntax: dicttree.py letterlist.txt"
+	else:
+		process_file()
